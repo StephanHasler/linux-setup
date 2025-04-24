@@ -1,0 +1,52 @@
+[http]
+    sslVerify = false
+[credential]
+    helper = cache --timeout=3600
+[core]
+    # Recommended to display file names with umlauts un-encoded.
+    quotePath = false
+[advice]
+    # Do not warn about detached head state.
+    detachedHead = false
+[push]
+    default = simple
+[fetch]
+    # Remove any remote-tracking references that no longer exist on the remote.
+    prune = true
+[diff]
+    tool = meld
+[difftool]
+    prompt = false
+[difftool "meld"]
+    cmd = meld "$LOCAL" "$REMOTE"
+[merge]
+    tool = meld
+[mergetool "meld"]
+    cmd = meld "$LOCAL" "$MERGED" "$REMOTE" --output "$MERGED"
+[alias]
+    # Misc.
+    s = status
+    co = checkout
+    lg = log --oneline --all --graph
+    # Show which submodules contain un-pushed commits.
+    ups = submodule foreach --recursive 'git log --branches --not --remotes'
+
+    # git diff.
+    d = diff
+    dc = diff --staged
+
+    # git commit.
+    ci   = commit
+    cim  = commit --message
+    cima = commit --all --message
+
+    # Index-related commands.
+    a = add
+    aa = add --all
+
+    # git clean.
+    # Clean all untracked and ignored files except .idea.
+    # Because of the second f it also removes git repositories inside ignored directories.
+    cleanf = clean -xdff -e .idea
+    # Clean all ignored files in all submodules.
+    cleansf = submodule foreach --recursive git clean -Xdf

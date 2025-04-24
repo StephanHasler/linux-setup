@@ -1,0 +1,3 @@
+if [ `basename -- "$0"` != Xsession ] ; then
+    source .bashrc
+fi

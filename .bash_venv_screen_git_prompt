@@ -1,0 +1,81 @@
+#
+#   Set the bash prompt according to:
+#    * the active virtualenv
+#    * the name of the screen you are in
+#    * the branch of the current git repository
+#
+#   Copy this file to your home directory and source it in your .bashrc
+#
+#
+
+# The various escape codes that we can use to color the prompt.
+COLOR_RED="\[\033[0;31m\]"
+COLOR_YELLOW="\[\033[1;33m\]"
+COLOR_GREEN="\[\033[0;32m\]"
+COLOR_BLUE="\[\033[1;34m\]"
+COLOR_PURPLE="\[\033[0;35m\]"
+COLOR_LIGHT_RED="\[\033[1;31m\]"
+COLOR_LIGHT_GREEN="\[\033[1;32m\]"
+COLOR_WHITE="\[\033[1;37m\]"
+COLOR_LIGHT_GRAY="\[\033[0;37m\]"
+COLOR_DARK_GRAY="\[\033[1;30m\]"
+COLOR_NONE="\[\e[0m\]"
+
+# Determine git branch information.
+function set_git_branch() {
+    # Try to get current branch.
+    if ! BRANCH=$(git branch --show-current 2> /dev/null); then
+        # We are not in a git repository.
+        GIT_BRANCH=""
+    else
+        # We are in a git repository.
+        if [[ -z ${BRANCH} ]]; then
+            # We are not on a branch, so we are detached.
+            GIT_BRANCH="${COLOR_RED}(detached)${COLOR_NONE}"
+        else
+            # We are on a branch.
+            GIT_BRANCH="${COLOR_GREEN}(${BRANCH})${COLOR_NONE}"
+        fi
+    fi
+}
+
+# Determine python virtualenv information.
+function set_virtualenv () {
+    if [[ -z "${VIRTUAL_ENV}" ]]; then
+        # We are not in a virtual environment.
+        PYTHON_VIRTUALENV=""
+    else
+        # We are in a virtual environment. We show the path of the virtual environment relative to the current directory.
+        #PYTHON_VIRTUALENV="${COLOR_GREEN}($(realpath --relative-to=$PWD --relative-base=${VIRTUAL_ENV%/*} $VIRTUAL_ENV)) ${COLOR_NONE}"
+        PYTHON_VIRTUALENV="${COLOR_GREEN}($(realpath --relative-to=$PWD --relative-base=${VIRTUAL_ENV%${VIRTUAL_ENV#/*/}} $VIRTUAL_ENV)) ${COLOR_NONE}"
+    fi
+}
+
+# Determine screen information.
+function set_screen_name() {
+    if [[ -z "${STY}" ]]; then
+        # We are not in a screen.
+        SCREEN_NAME=""
+    else
+        # We are in a screen.
+        SCREEN_NAME="${COLOR_PURPLE}[${STY#[0-9]*.}:${WINDOW}] ${COLOR_NONE}"
+    fi
+}
+
+# Set the full bash prompt.
+function set_bash_prompt () {
+    # Set the PYTHON_VIRTUALENV variable.
+    set_virtualenv
+
+    # Set the GIT_BRANCH variable.
+    set_git_branch
+
+    # Set the SCREEN_NAME variable.
+    set_screen_name
+
+    # Set the bash prompt variable.
+    PS1="${PYTHON_VIRTUALENV}${SCREEN_NAME}\h:\w${GIT_BRANCH}>"
+}
+
+# Tell bash to execute this function just before displaying its prompt.
+PROMPT_COMMAND=set_bash_prompt

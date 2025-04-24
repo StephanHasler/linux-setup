@@ -1,0 +1,45 @@
+#### General settings ###
+# Don't show copyright notice at startup.
+startup_message off
+# Don't use the visual bell.
+vbell off
+# Suppress output of a bell message line.
+bell_msg ""
+# Enable alternate screen support.
+altscreen on
+# Modify terminal’s termcap entry.
+termcapinfo xterm* ti@:te@
+# Set default scrollback buffer length.
+defscrollback 5000
+# Configure the status line.
+# Status including hostname, active window could be truncated: [ blue-17 ][     0 ros  1 scene  2 fuzzy    ]
+#hardstatus alwayslastline '%{= kw}[%{r} %H %{w}] [%= %{= kw}%-w%{+b r}%n %t%{= kw} %+w%= ]'
+# Status more condensed, without hostname and centering active window:    0 ros  1 scene  2 fuzzy
+hardstatus alwayslastline '%{= kw}%=%-w%{+b r}%50>%n %t%{-}%+w%=%<'
+# Only display messages shortly to increase responsiveness.
+msgwait 1
+
+# Set logfile format to 'screen_SCREENNAME_WINDOWTITLE.log'.
+logfile screen_%S_%t.log
+# Disable buffering of log file write to get changes immediately.
+logfile flush 0
+
+### Key bindings ###
+# F2 opens a new window (tab).
+bindkey -k k2 screen -t ''
+# F3 switches to the previous window (tab).
+bindkey -k k3 prev
+# F4 switches to the nex window (tab).
+bindkey -k k4 next
+# F5 allows to set a window (tab) title.
+bindkey -k k5 title
+# F6 detaches from the screen session. It keeps running. You can attach to it again with 'screen -r'.
+bindkey -k k6 detach
+# F7 sends a CTRL+C to all windows (tabs) in your screen session. Used to stop systems that run over many windows (tabs).
+bindkey -k k7 at \# stuff ^C
+# F8 stops the screen session. This will also stop the processes in all windows (tabs) but not as gently as a CTRL+C would do.
+bindkey -k k8 eval quit
+# PgUp enters copy/scrollback mode and page up.
+bindkey "^[[5~" eval 'copy' 'stuff ^b'
+# PgDown enters copy/scrollback mode and page down.
+bindkey "^[[6~" eval 'copy' 'stuff ^f'

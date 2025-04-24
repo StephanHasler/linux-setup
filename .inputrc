@@ -1,0 +1,15 @@
+# Show alternative completions already on first press of 'tab'.
+set show-all-if-ambiguous on
+# Switch off 'more'-like pager for many completions.
+set page-completions off
+# Don't match files beginning with a '.' during filename completion.
+set match-hidden-files off
+# Append a character denoting a file’s type to the filename when listing possible completions.
+set visible-stats on
+# Never ring the terminals bell.
+set bell-style none
+# Use cursor-up and cursor-down to search in history in different terminals.
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+"\eOA": history-search-backward
+"\eOB": history-search-forward
